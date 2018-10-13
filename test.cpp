@@ -5,6 +5,7 @@
  * =====================================================================================
  */
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <random>
@@ -58,7 +59,7 @@ void FillArray(unsigned int *result,  unsigned int max_value)
     {
         for (pos = ud(gen); g_map[pos]; pos = ud(gen));
         g_map[pos] = true;
-        result[pos] = i;
+        result[pos] = i + 1;
     }
 }
 
@@ -90,9 +91,24 @@ void Sort(unsigned int *values, unsigned int count)
 //    и определяющую значение последнего элемента в массиве без доступа к нему.
 //
 
+unsigned int NaturalSum(unsigned int count)
+{
+    unsigned int ns = 0;
+
+    for (unsigned int i = 1; i <= count; ++i) ns += i;
+
+    return ns;
+
+}
+
 unsigned int FindMissingValue(const unsigned int *values, unsigned int count)
 {
-    return values[count - 1];
+    // The array includes unique numbers from 1 to count - 1.
+    assert(count >= 2);
+
+    unsigned int s = 0;
+    for (unsigned int i = 0; i < count - 1; ++i) s += values[i];
+    return NaturalSum(count) - s;
 }
 
 
@@ -112,7 +128,7 @@ int main()
 
     unsigned int arr_result[255];
 
-    for (unsigned int i = 1; i <= 10; ++i)
+    for (unsigned int i = 2; i <= 10; ++i)
     {
         std::stringstream ss;
         FillArray(arr_result, i);
